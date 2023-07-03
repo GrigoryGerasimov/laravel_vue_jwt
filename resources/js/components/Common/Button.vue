@@ -5,17 +5,19 @@ export default defineComponent({
     name: 'Button',
 
     props: {
-        type: {
+        btnType: {
             type: String,
-            required: true,
-            default: 'button'
+            default: 'button',
+            validator(btnType) {
+                return ['submit', 'reset', 'button'].includes(btnType)
+            }
         }
     }
 })
 </script>
 
 <template>
-    <button :type='type' class='btn'>
+    <button :type='btnType' class='btn w-25 my-4 px-3'>
         <slot></slot>
     </button>
 </template>

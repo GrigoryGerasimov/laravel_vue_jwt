@@ -13,9 +13,23 @@ export default defineComponent({
 </script>
 
 <template>
-    <FormControl id='email' title='email' type='email' name='email' placeholder='email'/>
-    <FormControl id='password' title='password' type='password' name='password' placeholder='password'/>
-    <Button type='submit'>Submit</Button>
+    <div class='w-50'>
+        <FormControl
+            input-id='email'
+            input-title='Email'
+            input-type='email'
+            input-name='email'
+            input-placeholder='Email'
+        />
+        <FormControl
+            input-id='password'
+            input-title='Password'
+            input-type='password'
+            input-name='password'
+            input-placeholder='Password'
+        />
+        <Button btn-type='submit' class='btn-outline-success'>Submit</Button>
+    </div>
 </template>
 
 <style scoped>
