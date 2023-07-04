@@ -3,10 +3,39 @@ import { defineComponent } from 'vue'
 import { Button, FormControl } from '../Common'
 
 export default defineComponent({
-    name: 'Register',
+    name: 'SignUp',
+
     components: {
         FormControl,
         Button
+    },
+
+    data() {
+        return {
+            firstName: null,
+            lastName: null,
+            email: null,
+            password: null,
+            passwordConfirmation: null,
+        }
+    },
+
+    computed: {
+        person() {
+            return {
+                name: `${this.firstName} ${this.lastName}`,
+                email: this.email,
+                password: this.password,
+                password_confirmation: this.passwordConfirmation
+            }
+        }
+    },
+
+    methods: {
+        async submitHandler() {
+            const response = await axios.post('/api/user/auth/signup', this.person)
+            console.log(response.data)
+        }
     }
 })
 </script>
@@ -18,12 +47,14 @@ export default defineComponent({
             input-title='First Name'
             input-name='first_name'
             input-placeholder='First name'
+            v-model='firstName'
         />
         <FormControl
             input-id='last_name'
             input-title='Last Name'
             input-name='last_name'
             input-placeholder='Last name'
+            v-model='lastName'
         />
         <FormControl
             input-id='email'
@@ -31,6 +62,7 @@ export default defineComponent({
             input-type='email'
             input-name='email'
             input-placeholder='Email'
+            v-model='email'
         />
         <FormControl
             input-id='password'
@@ -38,6 +70,7 @@ export default defineComponent({
             input-type='password'
             input-name='password'
             input-placeholder='Password'
+            v-model='password'
         />
         <FormControl
             input-id='password_confirmation'
@@ -45,8 +78,9 @@ export default defineComponent({
             input-type='password'
             input-name='password_confirmation'
             input-placeholder='Password confirmation'
+            v-model='passwordConfirmation'
         />
-        <Button btn-type='submit' class='btn-outline-success'>Submit</Button>
+        <Button btn-type='submit' class='btn-outline-success' @click.prevent='submitHandler'>Submit</Button>
     </div>
 </template>
 

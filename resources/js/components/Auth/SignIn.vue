@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 import { FormControl, Button } from '../Common'
 
 export default defineComponent({
-    name: 'Login',
+    name: 'SignIn',
 
     components: {
         FormControl,

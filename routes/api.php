@@ -13,7 +13,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Fruits', 'prefix' => 'fruits'
 
 Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user'], function() {
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
-        Route::post('/signin', 'SigninController')->name('api.auth.signin');
-        Route::post('/signup', 'SignupController')->name('api.auth.signup');
+        Route::post('/signin', 'SignInController')->name('api.auth.signin');
+        Route::post('/signup', 'SignUpController')->name('api.auth.signup');
     });
 });

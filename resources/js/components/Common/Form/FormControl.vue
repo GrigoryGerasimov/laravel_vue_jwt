@@ -24,8 +24,11 @@ export default defineComponent({
         inputType: {
             type: String,
             default: 'text'
-        }
-    }
+        },
+        modelValue: String
+    },
+
+    emits: ['update:modelValue']
 })
 </script>
 
@@ -41,6 +44,8 @@ export default defineComponent({
                 :id='inputId'
                 :name='inputName'
                 :placeholder='inputPlaceholder'
+                :value='modelValue'
+                @input="$emit('update:modelValue', $event.target.value)"
             />
         </div>
 
