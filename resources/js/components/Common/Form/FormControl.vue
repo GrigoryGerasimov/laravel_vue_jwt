@@ -5,35 +5,50 @@ export default defineComponent({
     name: 'FormControl',
 
     props: {
-        id: {
+        inputId: {
             type: String,
             required: true
         },
-        name: {
+        inputName: {
             type: String,
             required: true
         },
-        placeholder: {
+        inputPlaceholder: {
             type: String,
             required: false
         },
-        title: {
+        inputTitle: {
             type: String,
             required: true
         },
-        type: {
+        inputType: {
             type: String,
-            required: true,
             default: 'text'
-        }
-    }
+        },
+        modelValue: String
+    },
+
+    emits: ['update:modelValue']
 })
 </script>
 
 <template>
-    <div class='input-group'>
-        <label class='form-label' :for='id'>{{ title }}</label>
-        <input class='form-control' :type="type" :id='id' :name='name' :placeholder='placeholder'/>
+    <div class='input-group col-12 d-flex flex-row align-items-baseline my-3'>
+        <div class='col-4'>
+            <label class='form-label' :for='inputId'>{{ inputTitle }}</label>
+        </div>
+        <div class='col-8'>
+            <input
+                class='form-control'
+                :type="inputType"
+                :id='inputId'
+                :name='inputName'
+                :placeholder='inputPlaceholder'
+                :value='modelValue'
+                @input="$emit('update:modelValue', $event.target.value)"
+            />
+        </div>
+
     </div>
 </template>
 
