@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { Table, TableHeader, TableBody } from '../Common'
+import { ApiService } from '../../services/ApiService.js'
 
 export default defineComponent({
     name: 'FruitsList',
@@ -19,8 +20,7 @@ export default defineComponent({
 
     methods: {
         async getFruitsList() {
-            const response = await axios.get('/api/fruits')
-            this.fruits = response.data
+            this.fruits = await ApiService.read('/api/fruits')
         }
     },
 
