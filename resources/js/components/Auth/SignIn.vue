@@ -1,6 +1,8 @@
 <script>
 import { defineComponent } from 'vue'
 import { FormControl, Button } from '../Common'
+import { ApiService } from '../../services/ApiService.js'
+import {TokenService} from "../../services/TokenService.js";
 
 export default defineComponent({
     name: 'SignIn',
@@ -23,13 +25,18 @@ export default defineComponent({
                 email: this.email,
                 password: this.password
             }
+        },
+
+        isDisabled() {
+            return !(this.email && this.password)
         }
     },
 
     methods: {
         async submitHandler() {
-            const response = await axios.post('/api/user/auth/signin', this.login);
-            console.log(response.data)
+            const data = await ApiService.create('/api/auth/login', this.login)
+            if (data['access_token']) TokenService.store(data)
+            this.$router.push({ name: 'fruits.index' })
         }
     }
 })
@@ -53,7 +60,14 @@ export default defineComponent({
             input-placeholder='Password'
             v-model='password'
         />
-        <Button btn-type='submit' class='btn-outline-success' @click.prevent='submitHandler'>Submit</Button>
+        <Button
+            btn-type='submit'
+            class='btn-outline-success'
+            @click.prevent='submitHandler'
+            :disabled="isDisabled"
+        >
+            Submit
+        </Button>
     </div>
 </template>
 

@@ -28,6 +28,10 @@ export default defineComponent({
                 password: this.password,
                 password_confirmation: this.passwordConfirmation
             }
+        },
+
+        isDisabled() {
+            return !(this.firstName && this.lastName && this.email && this.password && this.passwordConfirmation)
         }
     },
 
@@ -80,7 +84,14 @@ export default defineComponent({
             input-placeholder='Password confirmation'
             v-model='passwordConfirmation'
         />
-        <Button btn-type='submit' class='btn-outline-success' @click.prevent='submitHandler'>Submit</Button>
+        <Button
+            btn-type='submit'
+            class='btn-outline-success'
+            @click.prevent='submitHandler'
+            :disabled='isDisabled'
+        >
+            Submit
+        </Button>
     </div>
 </template>
 
