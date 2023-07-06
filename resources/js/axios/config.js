@@ -23,17 +23,11 @@ api.interceptors.request.use(async config => {
 
     return config
 }, error => {
-    ErrorHandlingService.log(error)
+    return ErrorHandlingService.handle(error)
 })
 
-api.interceptors.response.use(config => {
-    if (TokenService.read()[JWT.ACCESS_TOKEN]) {
-        config.headers.authorization = `Bearer ${TokenService.read()[JWT.ACCESS_TOKEN]}`
-    }
-
-    return config
-}, error => {
-    ErrorHandlingService.log(error)
+api.interceptors.response.use(config => config, error => {
+    return ErrorHandlingService.handle(error)
 })
 
 export {

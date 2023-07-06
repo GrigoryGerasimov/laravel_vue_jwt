@@ -1,6 +1,8 @@
 <script>
 import { defineComponent } from 'vue'
 import { Button, FormControl } from '../Common'
+import { ApiService } from '../../services/ApiService.js'
+import { TokenService } from '../../services/TokenService.js'
 
 export default defineComponent({
     name: 'SignUp',
@@ -17,6 +19,7 @@ export default defineComponent({
             email: null,
             password: null,
             passwordConfirmation: null,
+            error: null
         }
     },
 
@@ -31,15 +34,30 @@ export default defineComponent({
         },
 
         isDisabled() {
-            return !(this.firstName && this.lastName && this.email && this.password && this.passwordConfirmation)
+            return !(this.firstName && this.lastName && this.email && this.password && this.passwordConfirmation) || this.error
         }
     },
 
     methods: {
         async submitHandler() {
-            const response = await axios.post('/api/user/auth/signup', this.person)
-            console.log(response.data)
+            try {
+                const signUpData = await ApiService.send('/api/user/auth/signup', this.person)
+                if (signUpData['error']) throw new Error(signUpData['error'])
+
+                const signInData = await ApiService.send('/api/auth/login', signUpData)
+                if (signInData['access_token']) TokenService.store(signInData)
+                if (signInData['error']) throw new Error(signInData['error'])
+
+                this.$router.replace({ name: 'fruits.index' })
+            } catch (error) {
+                this.error = error.message
+                setTimeout(() => this.error = null, 3000)
+            }
         }
+    },
+
+    mounted() {
+        this.$refs.input.$el.children[1].querySelector('#first_name').focus()
     }
 })
 </script>
@@ -52,6 +70,7 @@ export default defineComponent({
             input-name='first_name'
             input-placeholder='First name'
             v-model='firstName'
+            ref='input'
         />
         <FormControl
             input-id='last_name'
@@ -92,6 +111,9 @@ export default defineComponent({
         >
             Submit
         </Button>
+        <p class='text-danger'>
+            {{ error }}
+        </p>
     </div>
 </template>
 
