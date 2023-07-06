@@ -15,7 +15,8 @@ export default defineComponent({
     data() {
         return {
             email: null,
-            password: null
+            password: null,
+            error: null
         }
     },
 
@@ -28,16 +29,26 @@ export default defineComponent({
         },
 
         isDisabled() {
-            return !(this.email && this.password)
+            return !(this.email && this.password) || this.error
         }
     },
 
     methods: {
         async submitHandler() {
-            const data = await ApiService.create('/api/auth/login', this.login)
-            if (data['access_token']) TokenService.store(data)
-            this.$router.push({ name: 'fruits.index' })
+            try {
+                const data = await ApiService.send('/api/auth/login', this.login)
+                if (data['access_token']) TokenService.store(data)
+                if (data['error']) throw new Error(data['error'])
+                this.$router.replace({ name: 'fruits.index' })
+            } catch (error) {
+                this.error = error.message
+                setTimeout(() => this.error = null, 3000)
+            }
         }
+    },
+
+    mounted() {
+        this.$refs.input.$el.children[1].querySelector('#email').focus()
     }
 })
 </script>
@@ -51,6 +62,7 @@ export default defineComponent({
             input-name='email'
             input-placeholder='Email'
             v-model='email'
+            ref='input'
         />
         <FormControl
             input-id='password'
@@ -68,6 +80,9 @@ export default defineComponent({
         >
             Submit
         </Button>
+        <p class='text-danger'>
+            {{ error }}
+        </p>
     </div>
 </template>
 

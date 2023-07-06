@@ -20,6 +20,10 @@ const TokenService = {
             [JWT.TOKEN_TYPE]: StorageService.read(JWT.TOKEN_TYPE),
             [JWT.EXPIRES_BY]: StorageService.read(JWT.EXPIRES_BY)
         }
+    },
+
+    remove() {
+        [JWT.ACCESS_TOKEN, JWT.TOKEN_TYPE, JWT.EXPIRES_BY].forEach(key => StorageService.remove(key))
     }
 }
 

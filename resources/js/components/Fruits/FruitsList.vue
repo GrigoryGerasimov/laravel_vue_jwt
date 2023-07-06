@@ -20,7 +20,7 @@ export default defineComponent({
 
     methods: {
         async getFruitsList() {
-            this.fruits = await ApiService.read('/api/fruits')
+            this.fruits = await ApiService.receive('/api/fruits')
         }
     },
 

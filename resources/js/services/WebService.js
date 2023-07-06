@@ -1,14 +1,13 @@
 import { web } from '../axios/config.js'
 
 const WebService = {
-    read: async path => {
+    receive: async path => {
         const response = await web.get(path)
         return response.data
     },
 
-    create: async (path, data) => {
+    send: async (path, data) => {
         const response = await web.post(path, data);
-        //'/api/user/auth/signin'
         return response.data
     },
 }
