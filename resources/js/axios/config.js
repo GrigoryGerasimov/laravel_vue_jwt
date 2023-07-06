@@ -18,9 +18,7 @@ api.interceptors.request.use(async config => {
     }
 
     if (TokenService.read()['access_token']) {
-        config.headers = {
-            'Authorization': `Bearer ${TokenService.read()['access_token']}`
-        }
+        config.headers.authorization = `Bearer ${TokenService.read()['access_token']}`
     }
 
     return config
@@ -30,9 +28,7 @@ api.interceptors.request.use(async config => {
 
 api.interceptors.response.use(config => {
     if (TokenService.read()['access_token']) {
-        config.headers = {
-            'Authorization': `Bearer ${TokenService.read()['access_token']}`
-        }
+        config.headers.authorization = `Bearer ${TokenService.read()['access_token']}`
     }
 
     return config

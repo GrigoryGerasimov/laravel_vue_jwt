@@ -1,6 +1,8 @@
+import router from '../components/router/router.js'
+
 const ErrorHandlingService = {
-    log: error => {
-        console.log(error.message)
+    log: async error => {
+        if (error.response.status === 401) await router.push({ name: 'auth.signin' })
     }
 }
 
