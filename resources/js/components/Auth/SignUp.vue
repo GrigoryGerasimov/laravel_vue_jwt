@@ -14,23 +14,27 @@ export default defineComponent({
 
     data() {
         return {
-            firstName: null,
-            lastName: null,
-            email: null,
-            password: null,
-            passwordConfirmation: null,
-            error: null
+            firstName: this.$store.getters.signUpFirstName,
+            lastName: this.$store.getters.signUpLastName,
+            email: this.$store.getters.signUpEmail,
+            password: this.$store.getters.signUpPassword,
+            passwordConfirmation: this.$store.getters.signUpPasswordConfirmation
         }
     },
 
     computed: {
         person() {
             return {
-                name: `${this.firstName} ${this.lastName}`,
+                firstName: this.firstName,
+                lastName: this.lastName,
                 email: this.email,
                 password: this.password,
                 password_confirmation: this.passwordConfirmation
             }
+        },
+
+        error() {
+            return this.$store.getters.signUpError
         },
 
         isDisabled() {
@@ -40,19 +44,8 @@ export default defineComponent({
 
     methods: {
         async submitHandler() {
-            try {
-                const signUpData = await ApiService.send('/api/user/auth/signup', this.person)
-                if (signUpData['error']) throw new Error(signUpData['error'])
-
-                const signInData = await ApiService.send('/api/auth/login', signUpData)
-                if (signInData['access_token']) TokenService.store(signInData)
-                if (signInData['error']) throw new Error(signInData['error'])
-
-                this.$router.replace({ name: 'fruits.index' })
-            } catch (error) {
-                this.error = error.message
-                setTimeout(() => this.error = null, 3000)
-            }
+            const data = await this.$store.dispatch('handleSignUpSubmit', this.person)
+            if (data) this.$store.dispatch('handleSignInSubmit', data)
         }
     },
 
