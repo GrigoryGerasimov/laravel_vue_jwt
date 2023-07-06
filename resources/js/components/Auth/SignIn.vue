@@ -1,8 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
 import { FormControl, Button } from '../Common'
-import { ApiService } from '../../services/ApiService.js'
-import {TokenService} from "../../services/TokenService.js";
 
 export default defineComponent({
     name: 'SignIn',
@@ -14,9 +12,8 @@ export default defineComponent({
 
     data() {
         return {
-            email: null,
-            password: null,
-            error: null
+            email: this.$store.getters.signInEmail,
+            password: this.$store.getters.signInPassword
         }
     },
 
@@ -28,22 +25,18 @@ export default defineComponent({
             }
         },
 
+        error() {
+            return this.$store.getters.signInError
+        },
+
         isDisabled() {
             return !(this.email && this.password) || this.error
         }
     },
 
     methods: {
-        async submitHandler() {
-            try {
-                const data = await ApiService.send('/api/auth/login', this.login)
-                if (data['access_token']) TokenService.store(data)
-                if (data['error']) throw new Error(data['error'])
-                this.$router.replace({ name: 'fruits.index' })
-            } catch (error) {
-                this.error = error.message
-                setTimeout(() => this.error = null, 3000)
-            }
+        submitHandler() {
+            this.$store.dispatch('handleSignInSubmit', this.login)
         }
     },
 
