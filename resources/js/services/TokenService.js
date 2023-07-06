@@ -24,5 +24,6 @@ const TokenService = {
 }
 
 export {
-    TokenService
+    TokenService,
+    JWT
 }
