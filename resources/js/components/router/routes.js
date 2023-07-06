@@ -13,6 +13,11 @@ const routes = [
         path: '/auth/signup',
         component: () => import('../Auth/SignUp.vue'),
         name: 'auth.signup'
+    },
+    {
+        path: '/:pathMatch(.*)',
+        component: () => import('../Common/404.vue'),
+        name: 'pagenotfound'
     }
 ]
 

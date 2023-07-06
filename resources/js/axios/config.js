@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ErrorHandlingService } from '../services/ErrorHandlingService.js'
-import { TokenService } from '../services/TokenService.js'
+import { TokenService, JWT } from '../services/TokenService.js'
 
 const web = axios.create()
 const api = axios.create()
@@ -17,8 +17,8 @@ api.interceptors.request.use(async config => {
         TokenService.store(response.data)
     }
 
-    if (TokenService.read()['access_token']) {
-        config.headers.authorization = `Bearer ${TokenService.read()['access_token']}`
+    if (TokenService.read()[JWT.ACCESS_TOKEN]) {
+        config.headers.authorization = `Bearer ${TokenService.read()[JWT.ACCESS_TOKEN]}`
     }
 
     return config
@@ -27,8 +27,8 @@ api.interceptors.request.use(async config => {
 })
 
 api.interceptors.response.use(config => {
-    if (TokenService.read()['access_token']) {
-        config.headers.authorization = `Bearer ${TokenService.read()['access_token']}`
+    if (TokenService.read()[JWT.ACCESS_TOKEN]) {
+        config.headers.authorization = `Bearer ${TokenService.read()[JWT.ACCESS_TOKEN]}`
     }
 
     return config
